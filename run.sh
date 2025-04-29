@@ -1,4 +1,5 @@
 # deploy Istio on a Minikube cluster.  
+minikube start
 minikube addons enable istio-provisioner
 minikube addons enable istio
 

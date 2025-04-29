@@ -1,0 +1,77 @@
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: mtls-webapp-mongo
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: mongo # Applies to the mongo pod
+  mtls:
+    mode: STRICT # Enforces mTLS for incoming connections
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: mtls-mongo-webapp
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: webapp # Applies to the webapp pod
+  mtls:
+    mode: STRICT # Enforces mTLS for incoming connections
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-webapp-to-mongo
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: mongo # Applies to the mongo pod
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals:
+              - "cluster.local/ns/default/sa/webapp-sa" # Service account of the webapp pod
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-mongo-to-webapp
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: webapp # Applies to the webapp pod
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals:
+              - "cluster.local/ns/default/sa/mongo-sa" # Service account of the mongo pod
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: mongo-destination-rule
+  namespace: default
+spec:
+  host: mongo-service.default.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL # Enforces mTLS for traffic to mongo-service
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: webapp-destination-rule
+  namespace: default
+spec:
+  host: webapp-service.default.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL # Enforces mTLS for traffic to webapp-service

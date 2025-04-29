@@ -1,0 +1,26 @@
+#Enforces mTLS for mongo and webapp services
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: mtls-webapp-mongo
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: mongo # Applies to the mongo pod
+  mtls:
+    mode: STRICT # Enforces mTLS for incoming connections
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: mtls-ingress-to-webapp
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: webapp # Applies to the webapp pod
+  mtls:
+    mode: PERMISSIVE # Allows both mTLS and plain-text traffic for external connections
+    #mode: STRICT # External connections must use mTLS

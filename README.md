@@ -1,5 +1,19 @@
 # secure data at rest and secure data in transit
 
+## Table of Contents
+
+1. [Project Overview](#project-overview)
+2. [Tools Used](#tools-used)
+3. [Requirements](#requirements)
+4. [Steps to Run the Project](#steps-to-run-the-project)
+5. [Webapp Code](#webapp_code)
+6. [Understanding Deployments](#understanding-deployments)
+    - [MongoDB Configuration](#mongodb-configuration)
+    - [MongoDB Sealed Secrets](#mongodb-sealed-secrets)
+    - [Mutual TLS (mTLS) Configuration](#mutual-tls-mtls-configuration)
+    - [MongoDB Image and Persistent Volume](#mongodb-image-and-persistent-volume)
+    - [Web Application](#web-application)
+
 ### Project Overview
 
 This repository demonstrates securing data at rest and in transit by implementing secure communication between two pods: a frontend pod and a backend pod. The frontend pod hosts a web application that connects to the backend pod running MongoDB. The communication between the pods is secured using mTLS provided by Istio. MongoDB is authenticated using a username and password retrieved from Kubernetes Sealed Secrets. Additionally, the MongoDB pod is backed by a LUKS-encrypted persistent volume, which is decrypted using a passphrase managed by HashiCorp Vault.
@@ -97,7 +111,7 @@ You are now ready to use the project!
 ### Webapp_Code
 This repository contains the code for a web application used in webapp that interacts with a database. The application creates a database named `my-db` to store and retrieve user details. The docker image is available at pavansaibalaga/myapp.
 
-### Deployments
+### Understanding Deployments
 
 1. **MongoDB Configuration**  
     The `mongo-config` Kubernetes ConfigMap is used to provide the MongoDB connection URL (`mongo-url`) to the web application. This configuration ensures the web application can connect to the MongoDB service.

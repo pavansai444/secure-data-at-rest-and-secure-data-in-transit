@@ -78,11 +78,15 @@ Follow the steps below to set up and run the project:
          ```bash
          mkfs.ext4 /dev/mapper/luks-loop
          ```
-
-    V. **Mount the Virtual Disk**  
+    V. **Close the LUKS Encrypted Device**  
+        After unmounting the device, securely close the LUKS-encrypted device:  
+        ```bash
+        cryptsetup close luks-loop
+        ```
+    VI. **Mount the Virtual Disk**  
         Mount the encrypted device to `/dev/loop12`:  
         ```bash
-        mount /dev/mapper/luks-loop /dev/loop12
+        sudo losetup /dev/loop12 /path/to/your/encrypted_file
         ```
     Ensure the LUKS passphrase is securely stored in HashiCorp Vault as described in the [Set Up HashiCorp Vault](#set-up-hashicorp-vault) section.
 

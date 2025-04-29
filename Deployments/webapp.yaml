@@ -23,7 +23,6 @@ spec:
       serviceAccountName: webapp-sa
       containers:
       - name: webapp
-        # image: nanajanashia/k8s-demo-app:v1.0
         image: pavansaibalaga/myapp:latest
         ports:
         - containerPort: 3000

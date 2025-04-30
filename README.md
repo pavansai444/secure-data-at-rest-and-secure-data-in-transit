@@ -95,15 +95,16 @@ Follow the steps below to set up and run the project:
     - Store a secret in Vault containing the LUKS decryption passphrase. For example:
       ```bash
       vault kv put secret/luks-passphrase value=<your-luks-passphrase>
-      ```
-
-4. **Apply Deployment Configurations**  
+4. **Create Sealed Secrets for MongoDB**  
+    To securely store MongoDB credentials, create a Sealed Secret using the `kubeseal` tool. Follow the steps outlined in this [YouTube tutorial](https://www.youtube.com/watch?v=wWMJCY2E0d4) to generate and apply a Sealed Secret for your deployment.
+    
+5. **Apply Deployment Configurations**  
     Run the provided `run.sh` script to apply all Kubernetes deployment configurations and secrets:  
     ```bash
     ./run.sh
     ```
 
-5. **Verify the Setup**  
+6. **Verify the Setup**  
     - Ensure all pods are running successfully in your Minikube cluster:  
       ```bash
       kubectl get pods
